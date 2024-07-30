@@ -2,7 +2,7 @@
   <div class="home">
     <div class="header">
       <img src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg" alt="" srcset="">
-      <input type="text" placeholder="De quoi avez vous envie?">
+      <input v-model="userSearchRestaurant" type="text" placeholder="De quoi avez vous envie?">
     </div>
     <div class="banner"></div>
     <RestaurantRow
@@ -16,7 +16,7 @@
 <script>
 //IMPORT
 import BDD from "../BDD";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 //COMPONENTS
 import RestaurantRow from "@/components/RestaurantRow.vue";
 export default {
@@ -36,6 +36,7 @@ export default {
     }
 
     let restaurants = ref([]);
+    let allRestaurants = [];
 
     const makeDataRestaurant = () => {
       let threeRestaurants = [];
@@ -46,6 +47,9 @@ export default {
           restaurant.image,
           restaurant.drive_time
         );
+
+        allRestaurants.push(newRestaurant);
+
         if (threeRestaurants.length === 2) {
           threeRestaurants.push(newRestaurant);
           restaurants.value.push(threeRestaurants);
@@ -56,9 +60,19 @@ export default {
       }
     };
 
+    //user seach restaurant
+    let userSearchRestaurant = ref('');
+
+    watch(userSearchRestaurant, newValue=>{
+      let regex = RegExp(newValue);
+
+      let searchRestaurant = allRestaurants.filter(restau => regex.test(restau.name));
+      
+    })
+
     onMounted(makeDataRestaurant);
 
-    return { restaurants };
+    return { restaurants,userSearchRestaurant };
   },
 };
 </script>
