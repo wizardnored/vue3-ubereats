@@ -15,26 +15,26 @@
 
 <script>
 //import
-import {computed} from 'vue';
+import { computed } from "vue";
 export default {
   name: "RestaurantCard",
   props: { infoRestaurant: Object },
-  setup(props){
-    const changeBackground = computed(() =>{
-      return {backgroundImage:`url(${props.infoRestaurant.image})`}
-    })
+  setup(props) {
+    const changeBackground = computed(() => {
+      return { backgroundImage: `url(${props.infoRestaurant.image})` };
+    });
 
     //return
-    return{
-      changeBackground
-    }
-  }
+    return {
+      changeBackground,
+    };
+  },
 };
 </script>
 
 <style lang="scss">
 .restaurant--card {
-  width: 32%;
+  width: 100%;
   height: 30vh;
 
   p {

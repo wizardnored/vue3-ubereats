@@ -2,11 +2,14 @@
   <div class="restaurant--row">
     <h2 class="title">Nos restaurants</h2>
     <div class="wrapper--card">
-      <RestaurantCard
-        v-for="(card, index) in threeRestaurants"
-        :infoRestaurant="card"
+      <RouterLink
+        class="restaurant--wrapper"
+        v-for="(restaurant, index) in threeRestaurants"
         :key="index"
-      />
+        :to="{ name: 'Restaurant', params: { name: restaurant.name } }"
+      >
+        <RestaurantCard :infoRestaurant="restaurant" />
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -26,6 +29,9 @@ export default {
 
 <style lang="scss">
 .restaurant--row {
+  .restaurant--wrapper {
+    width: 33%;
+  }
   .title {
     font-size: 2rem;
   }
