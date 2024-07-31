@@ -1,8 +1,30 @@
 <template>
   <div class="home">
     <div class="header">
-      <img src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg" alt="" srcset="">
-      <input v-model="userSearchRestaurant" type="text" placeholder="De quoi avez vous envie?">
+      <img
+        src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg"
+        alt=""
+        srcset=""
+      />
+      <div class="wrapper--input">
+        <input
+          v-model="userSearchRestaurant"
+          type="text"
+          placeholder="De quoi avez vous envie?"
+        />
+        <div class="search">
+          <div
+            v-for="(restaurant, i) in searchRestaurant"
+            :key="i"
+            class="container--restaurant--search"
+          >
+            <div class="wrapper--img">
+              <img :src="restaurant.image" alt="" />
+            </div>
+            <p>{{ restaurant.name }}</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="banner"></div>
     <RestaurantRow
@@ -61,43 +83,79 @@ export default {
     };
 
     //user seach restaurant
-    let userSearchRestaurant = ref('');
+    let userSearchRestaurant = ref("");
+    let searchRestaurant = ref([]);
 
-    watch(userSearchRestaurant, newValue=>{
-      let regex = RegExp(newValue);
+    watch(userSearchRestaurant, (newValue) => {
+      let regex = RegExp(newValue.toLowerCase());
 
-      let searchRestaurant = allRestaurants.filter(restau => regex.test(restau.name));
-      
-    })
+      let newSearchRestaurant = allRestaurants.filter((restau) =>
+        regex.test(restau.name.toLowerCase())
+      );
+
+      newValue == 0
+        ? (searchRestaurant.value = [])
+        : (searchRestaurant.value = newSearchRestaurant);
+    });
 
     onMounted(makeDataRestaurant);
 
-    return { restaurants,userSearchRestaurant };
+    return { restaurants, userSearchRestaurant, searchRestaurant };
   },
 };
 </script>
 
 <style lang="scss">
-.home{
-  .header{
+.home {
+  .header {
     height: 120px;
-    width:100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    img{
+    img {
       width: 200px;
     }
-    input{
-      background-color: #f6f6f6;
-      border: none;
-      height: 60px;
-      width: 400px;
-      outline: none;
-      padding-left: 20px;
+
+    .wrapper--input {
+      position: relative;
+      input {
+        background-color: #f6f6f6;
+        border: none;
+        height: 60px;
+        width: 400px;
+        outline: none;
+        padding-left: 20px;
+      }
+      .search {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        background-color: #ffffff;
+        .container--restaurant--search {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+
+          &:hover {
+            background-color: #f6f6f6;
+          }
+          .wrapper--img {
+            height: 60px;
+            width: 60px;
+            margin-right: 25px;
+            border-radius: 50%;
+            overflow: hidden;
+            img {
+              height: 100%;
+              width: auto;
+            }
+          }
+        }
+      }
     }
   }
-  .banner{
+  .banner {
     height: 200px;
     width: 100%;
     background-image: url("https://techcrunch.com/wp-content/uploads/2019/04/uber-eats-icon-ios.jpg");
